@@ -26,8 +26,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          imgs: [],
-          position: [],
+          imgs: [], // { src, transform }[] || string[]
           curve: false,
           preview: 1,
         };
@@ -37,7 +36,7 @@ export default {
   emits: ["change"],
   data() {
     return {
-      itemsPosition: null,
+      itemsTransform: null,
       active: 0,
       imgsData: null,
       frame: null,
@@ -62,6 +61,8 @@ export default {
       carouselItems.forEach((carouselItem) => {
         carouselList.appendChild(carouselItem.cloneNode(true));
       });
+
+      setTransform();
     },
     setData() {
       this.imgs = this.options.imgs ?? [];
@@ -73,8 +74,17 @@ export default {
       this.$emit("change", this.active);
     },
     setTransform() {
-      // 初始化imgsTransform
-      this.itemsTransform = [];
+      // 初始化itemsPosition
+      // 根據options傳入參數，初始化position
+      /**
+       * 例如options.imgs = [
+       *   { src..., transform: { x: '-15%', scale: 0.5 } }
+       * ]
+       * 傳出的itemsPosition
+       */
+
+      this.itemsPosition = [];
+      const carouselList = this.$refs.list;
     },
     // Hammer
     setHammer() {

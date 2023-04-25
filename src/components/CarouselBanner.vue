@@ -80,6 +80,7 @@ export default {
     },
     onPanMove(e) {
       this.pan.diff = e.center.x - this.pan.origin;
+      // 取得transform percent
     },
     onPanEnd() {
       this.pan.origin = 0;

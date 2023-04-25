@@ -1,7 +1,5 @@
 <template>
   <div>
-    <p>start: {{ pan.origin }}</p>
-    <p>move: {{ pan.diff }}</p>
     <div ref="container" class="carousel__container">
       <div ref="list" class="carousel__list">
         <div
@@ -20,16 +18,12 @@
 import Hammer from "hammerjs";
 
 export default {
-  name: "CarouselPicture", //
+  name: "CarouselBanner",
   props: {
-    options: {
-      type: Object,
+    imgs: {
+      type: Array,
       default: () => {
-        return {
-          imgs: [], // { src, transform }[] || string[]
-          curve: false,
-          preview: 1,
-        };
+        return [];
       },
     },
   },
@@ -55,7 +49,7 @@ export default {
   },
   methods: {
     init() {
-      if (!this.options.imgs.length) return;
+      if (!this.imgs.length) return;
       const carouselList = this.$refs.list;
       const carouselItems = Array.from(carouselList.children);
       carouselItems.forEach((carouselItem) => {
@@ -65,26 +59,12 @@ export default {
       setTransform();
     },
     setData() {
-      this.imgs = this.options.imgs ?? [];
-      this.imgsData = this.options.imgs ?? [];
+      this.imgsData = this.imgs ?? [];
       this.setTransform();
     },
     goSlide() {
       console.log("go slide: " + this.active);
       this.$emit("change", this.active);
-    },
-    setTransform() {
-      // 初始化itemsPosition
-      // 根據options傳入參數，初始化position
-      /**
-       * 例如options.imgs = [
-       *   { src..., transform: { x: '-15%', scale: 0.5 } }
-       * ]
-       * 傳出的itemsPosition
-       */
-
-      this.itemsPosition = [];
-      const carouselList = this.$refs.list;
     },
     // Hammer
     setHammer() {
@@ -98,20 +78,11 @@ export default {
       this.pan.origin = e.center.x;
     },
     onPanMove(e) {
-      // get diff
       this.pan.diff = e.center.x - this.pan.origin;
-      // const transformDiff = []
-      // if imgsTransform => get imgsTransform & calculate diff percent
-      // else => based slide on preview
-      //
-
-      //
-
-      // this.$refs.container.style.transform
     },
     onPanEnd() {
-      // this.pan.origin = 0;
-      // this.pan.diff = 0;
+      this.pan.origin = 0;
+      this.pan.diff = 0;
       this.goSlide();
     },
   },
